@@ -1,0 +1,6 @@
+datasets==3.2.0
+lm_eval==0.4.7
+numpy
+Requests==2.32.4
+tqdm==4.67.1
+transformers==4.51.3
