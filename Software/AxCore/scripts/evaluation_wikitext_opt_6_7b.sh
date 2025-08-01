@@ -1,13 +1,6 @@
-device=3
+device=0
 
-model="facebook/opt-2.7b"
-# model="facebook/opt-6.7b"
-# model="facebook/opt-13b"
-# model="facebook/opt-30b"
-
-# model="/local-ssd/jiaxiang/models/llama/llama2_7b_hf"
-# model="/local-ssd/jiaxiang/models/llama/llama2_70b_hf"
-
+model="facebook/opt-6.7b"
 
 torch_dtype="float16"
 
@@ -24,11 +17,7 @@ CUDA_VISIBLE_DEVICES=$device python evaluation/wikitext/evaluate_hf.py \
     --w_group_size 128 \
     --w_bit 4 \
     --linear_approx \
-    # --sequential_calib \
-    # --attention_approx \
-    # --kvquant \
-    # --kv_bit 4 \
-    # --kv_group_size 64 \
+
 
     
     
