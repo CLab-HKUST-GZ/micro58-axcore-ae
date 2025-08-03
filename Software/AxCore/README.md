@@ -7,6 +7,13 @@ We evaluate the results with models in perplexity and zero-shot evaluations.
 + INTEL(R) XEON(R) GOLD 6544Y
 + 4 * NVIDIA RTX 6000 Ada GPUs (48GB)
 
+## Prerequisite
+
++ Ubuntu 22.04.5 LTS
++ Conda 25.1.1
++ Python 3.9
++ gcc 11.4.0
++ CUDA 12.4
 
 ## Environment
 
@@ -16,10 +23,6 @@ conda create -n axcore python=3.9
 conda activate axcore
 conda install pytorch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 pytorch-cuda=12.4 -c pytorch -c nvidia
 pip install -r requirements.txt
-```
-
-### Docker
-```bash
 ```
 
 ## Evaluation
