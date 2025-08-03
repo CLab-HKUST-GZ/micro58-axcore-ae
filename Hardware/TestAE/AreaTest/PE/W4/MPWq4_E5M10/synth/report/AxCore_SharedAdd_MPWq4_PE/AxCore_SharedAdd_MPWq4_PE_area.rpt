@@ -1,0 +1,46 @@
+ 
+****************************************
+Report : area
+Design : AxCore_SharedAdd_MPWq4_PE
+Version: V-2023.12
+Date   : Sun Aug  3 17:39:40 2025
+****************************************
+
+Library(s) Used:
+
+    tcbn28hpcplusbwp30p140ffg0p99v0c_ccs (File: /hpc/Tech/TSMC/digital/N28/digital/Front_End/timing_power_noise/CCS/tcbn28hpcplusbwp30p140_180a/tcbn28hpcplusbwp30p140ffg0p99v0c_ccs.db)
+
+Number of ports:                          159
+Number of nets:                           168
+Number of cells:                           55
+Number of combinational cells:             48
+Number of sequential cells:                 4
+Number of macros/black boxes:               0
+Number of buf/inv:                          5
+Number of references:                       5
+
+Combinational area:                 32.760000
+Buf/Inv area:                        1.260000
+Noncombinational area:               9.072000
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (Wire load has zero net area)
+
+Total cell area:                    41.832000
+Total area:                 undefined
+
+Hierarchical area distribution
+------------------------------
+
+                                  Global cell area          Local cell area
+                                  ------------------  --------------------------- 
+Hierarchical cell                 Absolute   Percent  Combi-    Noncombi-  Black-
+                                  Total      Total    national  national   boxes   Design
+--------------------------------  ---------  -------  --------  ---------  ------  ---------
+AxCore_SharedAdd_MPWq4_PE           41.8320    100.0    3.5280     9.0720  0.0000  AxCore_SharedAdd_MPWq4_PE
+AxMultS1                            13.7340     32.8   13.7340     0.0000  0.0000  AdderInt
+GuardingAW                           8.4420     20.2    8.4420     0.0000  0.0000  GuardAW
+SNC_MPWq4                            7.0560     16.9    7.0560     0.0000  0.0000  SNC_W4
+--------------------------------  ---------  -------  --------  ---------  ------  ---------
+Total                                                  32.7600     9.0720  0.0000
+
+1

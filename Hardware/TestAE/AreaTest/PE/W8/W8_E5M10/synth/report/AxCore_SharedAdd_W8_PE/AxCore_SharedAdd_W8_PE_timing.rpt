@@ -1,0 +1,96 @@
+Information: Updating design information... (UID-85)
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -nets
+        -max_paths 1
+        -transition_time
+Design : AxCore_SharedAdd_W8_PE
+Version: V-2023.12
+Date   : Sun Aug  3 16:38:07 2025
+****************************************
+
+Operating Conditions: ffg0p99v0c   Library: tcbn28hpcplusbwp30p140ffg0p99v0c_ccs
+Wire Load Model Mode: segmented
+
+  Startpoint: WqLockReg_reg[3]
+              (rising edge-triggered flip-flop clocked by clock)
+  Endpoint: R_FP[15] (output port clocked by clock)
+  Path Group: clock
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  AxCore_SharedAdd_W8_PE ZeroWireload      tcbn28hpcplusbwp30p140ffg0p99v0c_ccs
+  AdderInt           ZeroWireload          tcbn28hpcplusbwp30p140ffg0p99v0c_ccs
+  SNC_W8             ZeroWireload          tcbn28hpcplusbwp30p140ffg0p99v0c_ccs
+  GuardAW            ZeroWireload          tcbn28hpcplusbwp30p140ffg0p99v0c_ccs
+
+Attributes:
+    d - dont_touch
+    u - dont_use
+   mo - map_only
+   so - size_only
+    i - ideal_net or ideal_network
+  inf - infeasible path
+
+  Point                             Fanout     Trans      Incr       Path      Attributes
+  -----------------------------------------------------------------------------------------------
+  clock clock (rise edge)                                 0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  WqLockReg_reg[3]/CP (DFCNQD1BWP30P140)        0.00      0.00       0.00 r
+  WqLockReg_reg[3]/Q (DFCNQD1BWP30P140)         0.01      0.04       0.04 f
+  Wq_COUT_FP[3] (net)                 4                   0.00       0.04 f
+  SNC_Wq8/Wq_FP_In[3] (SNC_W8)                            0.00       0.04 f
+  SNC_Wq8/Wq_FP_In[3] (net)                               0.00       0.04 f
+  SNC_Wq8/U4/ZN (NR4D0BWP30P140)                0.04      0.03       0.07 r
+  SNC_Wq8/n6 (net)                    5                   0.00       0.07 r
+  SNC_Wq8/U10/ZN (INVD0BWP30P140)               0.01      0.01       0.08 f
+  SNC_Wq8/n3 (net)                    1                   0.00       0.08 f
+  SNC_Wq8/U3/ZN (OAI32D0BWP30P140)              0.04      0.03       0.10 r
+  SNC_Wq8/Wq_FP_Out[1] (net)          1                   0.00       0.10 r
+  SNC_Wq8/Wq_FP_Out[1] (SNC_W8)                           0.00       0.10 r
+  SNC_Wq8_Wq_FP_Out[1] (net)                              0.00       0.10 r
+  AxMultS1/X[8] (AdderInt)                                0.00       0.10 r
+  AxMultS1/X[8] (net)                                     0.00       0.10 r
+  AxMultS1/intadd_0/U7/CO (FA1D0BWP30P140)      0.02      0.03       0.14 r    mo 
+  AxMultS1/intadd_0/n6 (net)          1                   0.00       0.14 r
+  AxMultS1/intadd_0/U6/CO (FA1D0BWP30P140)      0.02      0.03       0.17 r    mo 
+  AxMultS1/intadd_0/n5 (net)          1                   0.00       0.17 r
+  AxMultS1/intadd_0/U5/CO (FA1D0BWP30P140)      0.02      0.03       0.20 r    mo 
+  AxMultS1/intadd_0/n4 (net)          1                   0.00       0.20 r
+  AxMultS1/intadd_0/U4/CO (FA1D0BWP30P140)      0.02      0.03       0.23 r    mo 
+  AxMultS1/intadd_0/n3 (net)          1                   0.00       0.23 r
+  AxMultS1/intadd_0/U3/CO (FA1D0BWP30P140)      0.02      0.03       0.26 r    mo 
+  AxMultS1/intadd_0/n2 (net)          1                   0.00       0.26 r
+  AxMultS1/intadd_0/U2/CO (FA1D0BWP30P140)      0.02      0.03       0.28 r    mo 
+  AxMultS1/intadd_0/n1 (net)          2                   0.00       0.28 r
+  AxMultS1/U4/ZN (ND2D1BWP30P140)               0.01      0.01       0.29 f
+  AxMultS1/n9 (net)                   2                   0.00       0.29 f
+  AxMultS1/U1/ZN (XNR3UD0BWP30P140)             0.02      0.02       0.31 f
+  AxMultS1/Sum[15] (net)              1                   0.00       0.31 f
+  AxMultS1/Sum[15] (AdderInt)                             0.00       0.31 f
+  AxMultS1_Sum[15] (net)                                  0.00       0.31 f
+  GuardingAW/AW_In[15] (GuardAW)                          0.00       0.31 f
+  GuardingAW/AW_In[15] (net)                              0.00       0.31 f
+  GuardingAW/U18/ZN (INR2D1BWP30P140)           0.01      0.01       0.33 f
+  GuardingAW/AW_Out[15] (net)         1                   0.00       0.33 f
+  GuardingAW/AW_Out[15] (GuardAW)                         0.00       0.33 f
+  R_FP[15] (net)                                          0.00       0.33 f
+  R_FP[15] (out)                                0.01      0.00       0.33 f
+  data arrival time                                                  0.33
+
+  clock clock (rise edge)                                 1.00       1.00
+  clock network delay (ideal)                             0.00       1.00
+  output external delay                                   0.00       1.00
+  data required time                                                 1.00
+  -----------------------------------------------------------------------------------------------
+  data required time                                                 1.00
+  data arrival time                                                 -0.33
+  -----------------------------------------------------------------------------------------------
+  slack (MET)                                                        0.67
+
+
+1

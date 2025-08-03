@@ -1,0 +1,45 @@
+ 
+****************************************
+Report : power
+        -hier
+        -analysis_effort low
+Design : AxCore_SharedAdd_W8_PE
+Version: V-2023.12
+Date   : Sun Aug  3 17:36:28 2025
+****************************************
+
+
+Library(s) Used:
+
+    tcbn28hpcplusbwp30p140ffg0p99v0c_ccs (File: /hpc/Tech/TSMC/digital/N28/digital/Front_End/timing_power_noise/CCS/tcbn28hpcplusbwp30p140_180a/tcbn28hpcplusbwp30p140ffg0p99v0c_ccs.db)
+
+
+Operating Conditions: ffg0p99v0c   Library: tcbn28hpcplusbwp30p140ffg0p99v0c_ccs
+Wire Load Model Mode: segmented
+
+Design        Wire Load Model            Library
+------------------------------------------------
+AxCore_SharedAdd_W8_PE ZeroWireload      tcbn28hpcplusbwp30p140ffg0p99v0c_ccs
+SNC_W8                 ZeroWireload      tcbn28hpcplusbwp30p140ffg0p99v0c_ccs
+AdderInt               ZeroWireload      tcbn28hpcplusbwp30p140ffg0p99v0c_ccs
+GuardAW                ZeroWireload      tcbn28hpcplusbwp30p140ffg0p99v0c_ccs
+
+
+Global Operating Voltage = 0.99 
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000pf
+    Time Units = 1ns
+    Dynamic Power Units = 1mW    (derived from V,C,T units)
+    Leakage Power Units = 1nW
+
+
+--------------------------------------------------------------------------------
+                                       Switch   Int      Leak     Total
+Hierarchy                              Power    Power    Power    Power    %
+--------------------------------------------------------------------------------
+AxCore_SharedAdd_W8_PE                 2.97e-03 4.36e-02  312.849 4.68e-02 100.0
+  GuardingAW (GuardAW)                 7.05e-04 3.53e-03   72.839 4.30e-03   9.2
+  AxMultS1 (AdderInt)                  1.13e-03 3.37e-03   94.204 4.60e-03   9.8
+  SNC_Wq8 (SNC_W8)                     4.29e-04 3.31e-04   18.062 7.78e-04   1.7
+1
