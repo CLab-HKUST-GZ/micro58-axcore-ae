@@ -1,21 +1,51 @@
 # AxCore: Hardware Design & Functional Verification
 
-This document outlines the hardware design and functional verification process for the AxCore project.
 
-The core is implemented using [SpinalHDL](https://spinalhdl.github.io/SpinalDoc-RTD/master/index.html), a modern, high-level hardware description language that facilitates efficient and flexible hardware design.
+## Project Overview
+This document outlines the hardware design and functional verification process for the AxCore project. The core is implemented using [SpinalHDL](https://spinalhdl.github.io/SpinalDoc-RTD/master/index.html), a modern, high-level hardware description language that facilitates efficient and flexible hardware design.
 
-All SpinalHDL source files are located in the [`hw/spinal/AxCore`](./hw/spinal/AxCore) directory.
+---
+
+## Directory Structure
+All project files are organized as follows:
+
+* **SpinalHDL Source Code:** `hw/spinal/AxCore`
+* **Verification & Testbenches:** `hw/spinal/AxCore/Testing`
+* **Generated Verilog RTL:** `hw/gen/AxCore/` (This directory is created after running the generator)
+
+
+<!-- All SpinalHDL source files are located in the [`hw/spinal/AxCore`](./hw/spinal/AxCore) directory.
 
 The SpinalHDL source is used to generate synthesizable Verilog RTL, which will be placed in the `hw/gen/AxCore/` directory upon generation.
 
-The functional verification testbench and all associated test cases, is located within [`hw/spinal/AxCore/Testing`](./hw/spinal/AxCore/Testing).
+The functional verification testbench and all associated test cases, is located within [`hw/spinal/AxCore/Testing`](./hw/spinal/AxCore/Testing). -->
+
+---
+
+## Environment Setup
+
+### Recommended: Pre-configured Environment
+
+We have prepared a ready-to-use development environment for you, which can be accessed via SSH. This is the fastest way to get started.
+
+> **Note:** For access details, please contact us at **[ychen433@connect.hkust-gz.edu.cn]**.
+
+### Alternative: Local Setup
+
+If you wish to set up your own local environment, you will need to install and configure the following:
+
+1.  **[Coursier](https://github.com/coursier/launchers/)**: A launcher for Scala applications.
+2.  **Synopsys VCS**: Must be configured for use with [SpinalHDL projects](https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Simulation/install/VCS.html).
+
+Please be aware that this process can be time-consuming. We strongly recommend using our provided environment for immediate productivity.
 
 
-**Note: We have prepared a ready-to-use development environment for you, which can be accessed via SSH. For access details, please contact us at [ychen433@connect.hkust-gz.edu.cn].**
 
-Alternatively, if you wish to set up your own local environment, you will need to install  [Coursier](https://github.com/coursier/launchers/), then configure a [VCS simulation environment for your SpinalHDL project](https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Simulation/install/VCS.html). Please be aware that this process can be time-consuming. We strongly recommend using our provided environment for immediate productivity.
+<!-- **Note: We have prepared a ready-to-use development environment for you, which can be accessed via SSH. For access details, please contact us at [ychen433@connect.hkust-gz.edu.cn].**
 
+Alternatively, if you wish to set up your own local environment, you will need to install  [Coursier](https://github.com/coursier/launchers/), then configure a [VCS simulation environment for your SpinalHDL project](https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Simulation/install/VCS.html). Please be aware that this process can be time-consuming. We strongly recommend using our provided environment for immediate productivity. -->
 
+---
 
 ## Generating Verilog RTL
 
@@ -40,6 +70,7 @@ exit
 The generated Verilog files can be found in the following output directory:
 [`hw/gen/AxCore/`](.hw/gen/AxCore/).
 
+---
 
 ## Functional Verification with VCS
 
