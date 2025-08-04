@@ -27,7 +27,7 @@ We have prepared a ready-to-use development environment for you, which can be ac
 If you wish to set up your own local environment, you will need to install and configure the following:
 
 1.  **[Coursier](https://github.com/coursier/launchers/)**: A launcher for Scala applications.
-2.  **Synopsys VCS**: Must be configured for use with [SpinalHDL projects](https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Simulation/install/VCS.html).
+2.  **Synopsys VCS**: Must be configured for use with [VCS simulation for SpinalHDL projects](https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Simulation/install/VCS.html).
 
 Please be aware that this process can be time-consuming. We strongly recommend using our provided environment for immediate productivity.
 
@@ -54,7 +54,7 @@ runMain AxCore.SystolicArray_W4.AxCore_SharedAdd_MPWq4_SA_Gen
 exit
 ```
 The generated Verilog files can be found in the following output directory:
-[`hw/gen/AxCore/`](.hw/gen/AxCore/).
+`hw/gen/AxCore/`.
 
 
 
