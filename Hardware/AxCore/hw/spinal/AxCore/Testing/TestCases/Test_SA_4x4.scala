@@ -170,6 +170,8 @@ object Test_SA_4x4 {
       println(row.map(elem => f"$elem%7.1f").mkString("  "))
     }
 
+    println(s" \nNote: Differences in Oq output between the DUT and the Golden reference is an expected behavior due to the approximate computing nature of the AxCore.")
+
     println(s" \n=============================================================================================================")
     println(s"End of <<< AxCore Systolic Array Test >>>")
     println(s"=============================================================================================================\n ")
