@@ -1,83 +1,75 @@
-# SpinalHDL Base Project
+# AxCore: Hardware Design & Functional Verification
 
-This repository is a base project to help Spinal users set-up project without knowledge about Scala and SBT.
+This document outlines the hardware design and functional verification process for the AxCore project.
 
+The core is implemented using SpinalHDL, a modern, high-level hardware description language that facilitates robust and flexible hardware design.
 
-## If it is your are learning SpinalHDL
+All SpinalHDL source files are located in the [`hw/spinal/AxCore`](./hw/spinal/AxCore) directory.
 
-You can follow the tutorial on the [Getting Started](https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Getting%20Started/index.html) page.
+The SpinalHDL source is used to generate synthesizable Verilog RTL, which will be placed in the `hw/gen/AxCore/` directory upon generation.
 
-More specifically:
-
-* instructions to install tools can be found on the [Install and setup](https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Getting%20Started/Install%20and%20setup.html#install-and-setup) page
-* instructions to get this repository locally are available in the [Create a SpinalHDL project](https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Getting%20Started/Install%20and%20setup.html#create-a-spinalhdl-project) section.
+The functional verification testbench and all associated test cases, is located within [`hw/spinal/AxCore/Testing`](./hw/spinal/AxCore/Testing).
 
 
-### TL;DR Things have already been set up in my environment, how do I run things to try SpinalHDL?
+## Generating Verilog
 
-Once in the `SpinalTemplateSbt` directory, when tools are installed, the commands below can be run to use `sbt`.
+Follow these steps to generate the Verilog RTL from the SpinalHDL source code. The process uses SBT (Simple Build Tool) to compile the Scala-based SpinalHDL code and execute the generator.
 
-```sh
-// To generate the Verilog from the example
-sbt "runMain projectname.MyTopLevelVerilog"
+```bash
+# First, navigate to the project's root directory
+cd TestAE/AxCore/
 
-// To generate the VHDL from the example
-sbt "runMain projectname.MyTopLevelVhdl"
+# Launch the SBT (Simple Build Tool) interactive shell
+cs launch sbt
 
-// To run the testbench
-sbt "runMain projectname.MyTopLevelSim"
+# Within the sbt shell, compile the project's source code
+compile
+
+# Execute the main generator to produce the Verilog files for a specific
+# configuration of the systolic array.
+runMain AxCore.SystolicArray_W4.AxCore_SharedAdd_MPWq4_SA_Gen
+
+# Wait for the "[success]" message, which indicates completion, then exit the sbt shell
+exit
+```
+The generated Verilog files can be found in the following output directory:
+[`hw/gen/AxCore/`](.hw/gen/AxCore/).
+
+
+## Functional Verification with VCS
+
+To run the functional verification suite, you'll use the SBT environment to launch VCS simulations. The testbench will report the DUT (Device Under Test) results and log a comparison against a golden reference model directly to your terminal.
+
+### Running the Complete Test Suite
+This command executes all verification tests in sequence.
+
+```bash
+# Navigate to the project's root directory
+cd TestAE/AxCore/
+
+# Launch the SBT interactive shell
+cs launch sbt
+
+# (Optional) If you've modified the source code, re-compile the project first
+compile
+
+# Run the complete functional test suite
+runMain AxCore.Testing.OverallFunctionalTest
 ```
 
-* The example hardware description is into `hw/spinal/projectname/MyTopLevel.scala`
-* The testbench is into `hw/spinal/projectname/MyTopLevelSim.scala`
+### Running the Complete Test Suite
+The `OverallFunctionalTest` suite is composed of several independent test modules. You can also execute these tests individually for more targeted debugging. Make sure you are inside the SBT shell before running these commands.
 
-When you really start working with SpinalHDL, it is recommended (both for comfort and efficiency) to use an IDE, see the [Getting started](https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Getting%20Started/index.html).
+```bash
+# 1. Test for Subnormal Number Conversion (SNC)
+# Verifies the logic for handling subnormal floating-point numbers.
+runMain AxCore.Testing.TestCases.Test_SNC_W4
 
+# 2. Test for Mixed-Precision Floating-Point Multiplication Approximation (mpFPMA)
+# Verifies the correctness of the approximate multiplication unit.
+runMain AxCore.Testing.TestCases.Test_mpFPMA
 
-## If you want to create a new project from this template
-
-### Change project name
-
-You might want to change the project name, which is currently `projectname`. To do so (let's say your actual project name is `myproject`; it must be all lowercase with no separators):
-
-* Update `build.sbt` and/or `build.sc` by replacing `projectname` by the name of your project `myproject` (1 occurrence in each file). The better is to replace in both (it will always work), but in some contexts you can keep only one of these two files:
-    * If you are sure all people only use `sbt`, you can replace only in `build.sbt` and remove `build.sc`
-    * If you are sure all people only use `mill`, you can replace only in `build.sc` and remove `build.sbt`
-    * Replace in both files for open-source project.
-* Put all your scala files into `hw/spinal/myproject/` (remove the unused `hw/spinal/projectname/` folder)
-* Start all your scala files with `package myproject`
-
-
-### Change project structure
-
-You can change the project structure as you want. The only restrictions (from Scala environment) are (let's say your actual project name is `myproject`):
-
-* you must have a `myproject` folder and files in it must start with `package myproject`
-* if you have a file in a subfolder `myproject/somepackage/MyElement.scala` it must start with `package myproject.somepackage`.
-* `sbt` and `mill` must be run right in the folder containing their configurations (recommended to not move these files)
-
-Once the project structure is modified, update configurations:
-
-* In `build.sbt` and/or `build.sc` (see above) replace `/ "hw" / "spinal"` by the new path to the folder containing the `myproject` folder.
-* In the spinal configuration file (if you kept it, by default it is in `projectname/Config.scala`) change the path in `targetDirectory = "hw/gen"` to the directory where you want generated files to be written. If you don't use a config or if it doesn't contain this element, generated files will be written in the root directory.
-
-
-### Update this README
-
-Of course you can replace/modify this file to help people with your own project!
-
-
-## Mill Support (Experimental)
-
-The [Mill build tool](https://com-lihaoyi.github.io/mill) can be installed and used instead of `sbt`.
-
-```sh
-// To generate the Verilog from the example
-mill projectname.runMain projectname.MyTopLevelVerilog
-
-// To generate the VHDL from the example
-mill projectname.runMain projectname.MyTopLevelVhdl
-
-// To run the testbench
-mill projectname.runMain projectname.MyTopLevelSim
+# 3. Test for the 4x4 Systolic Array
+# Verifies the core functionality of the systolic array dataflow and computation.
+runMain AxCore.Testing.TestCases.Test_SA_4x4
 ```
