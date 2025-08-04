@@ -25,8 +25,7 @@ cs launch sbt
 # Within the sbt shell, compile the project's source code
 compile
 
-# Execute the main generator to produce the Verilog files for a specific
-# configuration of the systolic array.
+# Generate Verilog files for a specific configuration of the systolic array
 runMain AxCore.SystolicArray_W4.AxCore_SharedAdd_MPWq4_SA_Gen
 
 # Wait for the "[success]" message, which indicates completion, then exit the sbt shell
