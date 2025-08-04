@@ -1,5 +1,7 @@
 # Artifact Evalution for MICRO58 AxCore
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16735233.svg)](https://doi.org/10.5281/zenodo.16735233)
+
 This repository contains the source code for reproducing the experiments in the paper "AxCore: A Quantization-Aware Approximate GEMM Unit For LLM Inference" at MICRO'25.
 
 [`Hardware/`](./Hardware) contains the hardware design of AxCore.
@@ -31,4 +33,3 @@ AxCore_artifact/
 │   │   ├── params/
 │   │   ├── AxCore/
 ```
-
