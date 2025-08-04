@@ -71,7 +71,7 @@ sh scripts/batch_evaluation_lm_eval.sh
 Or you can use
 ```bash
 sh scripts/evaluation_lm_eval_opt_30b.sh        # About 36 hours, 70GB VRAM
-sh scripts/evaluation_lm_eval_llama2_70b.sh     # About 90 hours, 160GB VRAM
+sh scripts/evaluation_lm_eval_llama2_70b.sh     # About 90 hours, 170GB VRAM 
 ```
 to evaluate a single model.
 
