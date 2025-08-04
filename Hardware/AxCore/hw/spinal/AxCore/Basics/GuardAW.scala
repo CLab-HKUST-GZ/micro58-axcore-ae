@@ -19,9 +19,6 @@ case class GuardAW(TotalWidth: Int) extends Component {
   // Check if AW_In (view as 2's complement) >= 0
   val SignTC = io.AW_In(TotalWidth-1)
 
-  // val Valid = (~SignTC) & io.Wq_NotZero & io.A_Valid
-
-  // ! DO I need an extra AW_Sign input for helping?
   val Valid = io.Wq_NotZero & io.A_Valid
 
   io.AW_Out := Mux(Valid, io.AW_In, B(0))
