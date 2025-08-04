@@ -25,23 +25,26 @@ object Test_SA_4x4 {
     val Fraction = MantWidth + 2
 
     // * Inputs
-    // Random
-    // val Wq_Matrix = TU.genRandomDynFP4Matrix(NumRows=4, NumCols=4, FmtSel=2)
+    // Wq Format Select. "0","1" for E3M0, "2" for E2M1, "3" for E1M2
+    val Wq_FmtSel = 0    
 
-    val Wq_FmtSel = 0    // Wq Format Select. 00,01 for E3M0, 10 for E2M1, 11 for E1M2
-
+    // Important:
+    // Each Wq element should be a correct value corresponding to it's value space of selected Wq Format.
+    // Value Space of E3M0: (0, 0.25, 0.5, 1,      2,             4,    8, 16)
+    // Value Space of E2M1: (0,       0.5, 1, 1.5, 2,      3,     4, 6       )
+    // Value Space of E1M2: (0,       0.5, 1, 1.5, 2, 2.5, 3, 3.5            )
     val Wq_Matrix = Array(
-      Array(1.0, 1.0, 1.0, 1.0),
-      Array(2.0, 2.0, 2.0, 2.0),
-      Array(4.0, 4.0, 4.0, 4.0),
-      Array(8.0, 8.0, 8.0, 8.0),
+      Array(1.0, 2.0 , 0.5, 1.0),
+      Array(2.0, 4.0 , 4.0, 1.0),
+      Array(4.0, 8.0 , 2.0, 4.0),
+      Array(8.0, 16.0, 8.0, 8.0),
     )
 
     val A_Matrix = Array(
-      Array(10.0, 10.0, 10.0, 10.0),
-      Array(20.0, 20.0, 20.0, 20.0),
-      Array(30.0, 30.0, 30.0, 30.0),
-      Array(40.0, 40.0, 40.0, 40.0),
+      Array(1.00, 5.25, 9.10 , 13.50),
+      Array(2.25, 6.00, 10.20, 14.60),
+      Array(3.75, 7.50, 11.30, 15.70),
+      Array(4.00, 8.75, 12.40, 16.80),
     )
 
 
