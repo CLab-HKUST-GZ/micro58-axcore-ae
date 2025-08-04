@@ -14,11 +14,10 @@ This repository contains the source code for reproducing the experiments in the 
 AxCore_artifact/
 ├── README.md
 ├── Hardware/
-│   ├── AreaTest/
-│   │   ├── PE/
-│   │   ├── Figure/
-│   ├── FunctionalTest/
-│   │   ├── AxCore/
+│   ├── AxCore/
+│   │   ├── README.md
+│   │   ├── project/
+│   │   ├── hw/
 ├── Software/
 │   ├── AxCore/
 │   │   ├── README.md
@@ -32,3 +31,4 @@ AxCore_artifact/
 │   │   ├── params/
 │   │   ├── AxCore/
 ```
+
