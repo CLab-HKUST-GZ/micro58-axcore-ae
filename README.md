@@ -2,11 +2,15 @@
 
 This repository contains the source code for reproducing the experiments in the paper "AxCore: A Quantization-Aware Approximate GEMM Unit For LLM Inference" at MICRO'25.
 
+<<<<<<< HEAD
 `Hardware/AxCore` contains the hardware design of AxCore.
+=======
+[`Hardware/`](./Hardware) contains the hardware design of AxCore.
+>>>>>>> 8dfa2f1 (update README)
 
-`Software/AxCore` contains the AxCore framework with PyTorch.
+[`Software/AxCore`](./Software/AxCore) contains the AxCore framework with PyTorch. (reproduces Table 2 and Table 3)
 
-`Software/axcore_simulator` contains the performance and energy evaluation of AxCore. 
+[`Software/axcore_simulator`](./Software/axcore_simulator) contains the performance and energy evaluation of AxCore. (reproduces Figure 17)
 
 
 ## Project Structure
