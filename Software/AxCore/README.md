@@ -27,6 +27,12 @@ pip install -r requirements.txt
 
 ## Evaluation
 
+### Note
+
+The scripts will automatically download the required models and datasets from the Hugging Face Hub (if not cached) and then perform the AxCore evaluation.
+
+For llama2 family models, you can also download them from [here](https://llama.meta.com/llama-downloads). You may also need to convert the model to huggingface format using the `convert_llama_weight_to_hf.py` in `transformers/src/transformers/models/llama`.
+
 ### Perplexity Evaluation
 
 For perplexity evaluation in Table 2, you can run the following script to evaluation all models.
@@ -49,14 +55,9 @@ Remember to set the `device` variable in the script to the GPU you want to use.
 The results will be saved in `results/ppl_results.txt`.
 
 The perplexity results under our configuration are listed in the following table.
-| Model | PPL |
-| --- | --- |
-| opt-2.7b | 12.87 |
-| opt-6.7b | 11.01 |
-| opt-13b | 10.20 |
-| opt-30b | 9.60 |
-| llama2-7b | 5.65 |
-| llama2-70b | 3.40 |
+| Model | opt-2.7b | opt-6.7b | opt-13b | opt-30b | llama2-7b | llama2-70b |
+| --- | --- | --- | --- | --- | --- | --- |
+| PPL | 12.87 | 11.01 | 10.20 | 9.60 | 5.65 | 3.40 |
 
 Results of perplexity evaluation can be reproduced with slight random error.
 
