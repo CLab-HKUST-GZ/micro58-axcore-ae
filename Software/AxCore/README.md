@@ -86,3 +86,7 @@ The zero-shot results under our configuration are listed in the following table.
 | llama2-70b | 82.11 | 83.79 | 82.59 | 78.61 | 81.78 |
 
 Results of zero-shot evaluation can be reproduced with slight random error.
+
+### Tender baseline
+
+For Tender baseline, you can run the following the REAMME.md in `./Tender`. to reproduce the results in Table 2.
