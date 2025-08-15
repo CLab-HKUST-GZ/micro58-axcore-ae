@@ -3,6 +3,7 @@
 start_time=$(date +%s)
 
 # Clear previous results file to avoid appending to old data
+mkdir -p results
 > results/axcore_res.csv
 
 python run_axcore.py --synth_csv ./params/systolic_array_synth_W4-FP16.csv 
