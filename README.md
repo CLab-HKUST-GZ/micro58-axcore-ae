@@ -10,6 +10,7 @@ This repository contains the source code for reproducing the experiments in the 
 
 [`Software/axcore_simulator`](./Software/axcore_simulator) contains the performance and energy evaluation of AxCore. (reproduces Figure 17)
 
+[`Profile`](./Profile) contains the gemm operations percentage of OPT and LLaMA models across various sequence lengths. (reproduces Figure 2)
 
 ## Project Structure
 ```
@@ -32,4 +33,9 @@ AxCore_artifact/
 │   │   ├── scripts/
 │   │   ├── params/
 │   │   ├── AxCore/
+│   │   ├── README.md
+│   ├── Profile/
+│   │   ├── fig2_cal.py
+│   │   ├── fig2.py
+│   │   ├── README.md
 ```
