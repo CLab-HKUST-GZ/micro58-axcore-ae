@@ -1,0 +1,104 @@
+diff --git a/lm_eval/models/gpt2.py b/lm_eval/models/gpt2.py
+index 77fa415e..5ddef5a4 100644
+--- a/lm_eval/models/gpt2.py
++++ b/lm_eval/models/gpt2.py
+@@ -15,6 +15,60 @@ def _get_dtype(
+         _torch_dtype = dtype
+     return _torch_dtype
+ 
++def set_params_tender_opt(model):
++    q_bits = 4
++    decomp_factor = 8
++    chunk_size = 16
++    for layer in model.model.decoder.layers:
++        attn = layer.self_attn
++
++        attn.quant_mha = True
++
++        attn.q_bits = q_bits
++        layer.q_bits = q_bits
++
++        attn.decomp_factor = decomp_factor
++        layer.decomp_factor = decomp_factor
++
++        attn.chunk_size = chunk_size
++        layer.chunk_size = chunk_size
++
++        attn.quant_out_bf16 = True
++        layer.quant_out_bf16 = True
++    
++    model.quant_lm_head = True
++    model.lm_head_tender.q_bits = q_bits
++    model.lm_head_tender.decomp_factor = decomp_factor
++    model.lm_head_tender.chunk_size = chunk_size
++    model.lm_head_tender.quant_out_bf16 = True
++
++def set_params_tender_llama(model):
++    q_bits = 4
++    decomp_factor = 14
++    chunk_size = 16
++    for layer in model.model.layers:
++        attn = layer.self_attn
++        mlp = layer.mlp
++
++        attn.quant_mha = True
++
++        attn.q_bits = q_bits
++        mlp.q_bits = q_bits
++
++        attn.decomp_factor = decomp_factor
++        mlp.decomp_factor = decomp_factor
++
++        attn.chunk_size = chunk_size
++        mlp.chunk_size = chunk_size
++
++        attn.quant_out_bf16 = True
++        layer.quant_out_bf16 = True
++
++    model.quant_lm_head = True
++    model.lm_head_tender.q_bits = q_bits
++    model.lm_head_tender.decomp_factor = decomp_factor
++    model.lm_head_tender.chunk_size = chunk_size
++    model.lm_head_tender.quant_out_bf16 = True
+ 
+ class HFLM(BaseLM):
+ 
+@@ -34,6 +88,7 @@ class HFLM(BaseLM):
+         load_in_8bit: Optional[bool] = False,
+         trust_remote_code: Optional[bool] = False,
+         dtype: Optional[Union[str, torch.dtype]]="auto",
++        scheme="base",
+     ):
+         super().__init__()
+ 
+@@ -90,11 +145,25 @@ class HFLM(BaseLM):
+                     torch_dtype=_get_dtype(dtype),
+                     trust_remote_code=trust_remote_code,
+                     ).to(self.device)
+-            self.tokenizer = transformers.AutoTokenizer.from_pretrained(
+-                    tokenizer if tokenizer else pretrained,
+-                    revision=revision,
+-                    trust_remote_code=trust_remote_code,
+-                    )
++            if scheme=="tender":
++                if 'opt' in pretrained:
++                    set_params_tender_opt(self.model)
++                elif 'llama' in pretrained:
++                    set_params_tender_llama(self.model)
++
++            try:
++                self.tokenizer = transformers.AutoTokenizer.from_pretrained(
++                        tokenizer if tokenizer else pretrained,
++                        revision=revision,
++                        trust_remote_code=trust_remote_code,
++                        )
++            except:
++                from transformers import LlamaTokenizer
++                self.tokenizer = LlamaTokenizer.from_pretrained(
++                        tokenizer if tokenizer else pretrained,
++                        revision=revision,
++                        trust_remote_code=trust_remote_code,
++                        )
+ 
+         else:
+             raise TypeError('Parameter pretrained should be of type str or transformers.PreTrainedModel')

@@ -1,0 +1,11 @@
+*.pt
+
+
+*.zst
+*.jsonl.zst
+
+__pycache__/
+*.pyc
+*.pyo
+
+transformers/
