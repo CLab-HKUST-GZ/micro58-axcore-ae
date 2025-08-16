@@ -18,18 +18,20 @@ All project files are organized as follows:
 ## Environment Setup
 ### Recommended: Pre-configured Environment
 
-We have prepared a ready-to-use development environment for you, which can be accessed via SSH. This is the fastest way to get started.
+We have prepared a ready-to-use development environment for you, which can be accessed via docker pull.
 
-> **Note:** For access details, please contact us at **[ychen433@connect.hkust-gz.edu.cn]**.
+```bash
+docker pull victorchan433/axcore-dev
 
-### Alternative: Local Setup
+docker run --rm -it victorchan433/axcore-dev /bin/bash
 
-If you wish to set up your own local environment, you will need to install and configure the following:
+# After entered
+cd /workspace
+git clone https://github.com/CLab-HKUST-GZ/micro58-axcore-ae.git
 
-1.  **[Coursier](https://github.com/coursier/launchers/)**: A launcher for Scala applications.
-2.  **Synopsys VCS**: Must be configured for use with [VCS simulation for SpinalHDL projects](https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Simulation/install/VCS.html).
-
-Please be aware that this process can be time-consuming. We strongly recommend using our provided environment for immediate productivity.
+# Navigate to the project's root directory
+cd micro58-axcore-ae/Hardware/AxCore/
+```
 
 
 
@@ -38,17 +40,17 @@ Please be aware that this process can be time-consuming. We strongly recommend u
 Follow these steps to generate the Verilog RTL from the SpinalHDL source code. The process uses SBT (Simple Build Tool) to compile the Scala-based SpinalHDL code and execute the generator.
 
 ```bash
-# First, navigate to the project's root directory
-cd TestAE/AxCore/
-
 # Launch the SBT (Simple Build Tool) interactive shell
 cs launch sbt
 
 # Within the sbt shell, compile the project's source code
 compile
 
-# Generate Verilog files for a specific configuration of the systolic array
+# Generate Verilog files for W4 configuration of the systolic array
 runMain AxCore.SystolicArray_W4.AxCore_SharedAdd_MPWq4_SA_Gen
+
+# Generate Verilog files for W8 configuration of the systolic array
+runMain AxCore.SystolicArray_W8.AxCore_SharedAdd_W8_SA_Gen
 
 # Wait for the "[success]" message, which indicates completion, then exit the sbt shell
 exit
@@ -58,16 +60,16 @@ The generated Verilog files can be found in the following output directory:
 
 
 
-## Functional Verification with VCS
+## Functional Verification with Iverilog
 
-To run the functional verification suite, you'll use the SBT environment to launch VCS simulations. The testbench will report the DUT (Device Under Test) results and log a comparison against a golden reference model directly to your terminal.
+To run the functional verification suite, you'll use the SBT environment to launch simulations. The testbench will report the DUT (Device Under Test) results and log a comparison against a golden reference model directly to your terminal.
 
 ### Running the Complete Test Suite
 This command executes all verification tests in sequence.
 
 ```bash
-# Navigate to the project's root directory
-cd TestAE/AxCore/
+# Make sure you're still in the project's root directory
+cd /workspace/micro58-axcore-ae/Hardware/AxCore/
 
 # Launch the SBT interactive shell
 cs launch sbt

@@ -171,5 +171,5 @@ object AxCore_SharedAdd_W8_SA_Gen extends App {
   Config.spinal.generateVerilog(AxCore_SharedAdd_W8_SA(
     TileRow=TileNum, TileCol=TileNum, PERow=PENum, PECol=PENum,
     QtExpoWidth=4, QtMantWidth=3, ExpoWidth=ExpoWidth, MantWidth=MantWidth, Integer=Integer, Fraction=Fraction
-  )).printRtl().mergeRTLSource()
+  )).mergeRTLSource()  // .printRtl()
 }
