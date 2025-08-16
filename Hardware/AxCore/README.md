@@ -52,8 +52,7 @@ runMain AxCore.SystolicArray_W4.AxCore_SharedAdd_MPWq4_SA_Gen
 # Generate Verilog files for W8 configuration of the systolic array
 runMain AxCore.SystolicArray_W8.AxCore_SharedAdd_W8_SA_Gen
 
-# Wait for the "[success]" message, which indicates completion, then exit the sbt shell
-exit
+# Wait for the "[success]" message, which indicates completion
 ```
 The generated Verilog files can be found in the following output directory:
 `hw/gen/AxCore/`.
@@ -68,11 +67,7 @@ To run the functional verification suite, you'll use the SBT environment to laun
 This command executes all verification tests in sequence.
 
 ```bash
-# Make sure you're still in the project's root directory
-cd /workspace/micro58-axcore-ae/Hardware/AxCore/
-
-# Launch the SBT interactive shell
-cs launch sbt
+# Make sure you're still in the sbt shell
 
 # (Optional) If you've modified the source code, re-compile the project first
 compile
@@ -85,6 +80,8 @@ runMain AxCore.Testing.OverallFunctionalTest
 The `OverallFunctionalTest` suite is composed of several independent test modules. You can also execute these tests individually for more targeted debugging. Make sure you are inside the SBT shell before running these commands.
 
 ```bash
+# Make sure you're still in the sbt shell
+
 # 1. Test for Subnormal Number Conversion (SNC)
 # Verifies the logic for handling subnormal floating-point numbers.
 runMain AxCore.Testing.TestCases.Test_SNC_W4
@@ -96,4 +93,7 @@ runMain AxCore.Testing.TestCases.Test_mpFPMA
 # 3. Test for the 4x4 Systolic Array
 # Verifies the core functionality of the systolic array dataflow and computation.
 runMain AxCore.Testing.TestCases.Test_SA_4x4
+
+# Tests are finished. To exit the sbt shell, type
+exit
 ```
