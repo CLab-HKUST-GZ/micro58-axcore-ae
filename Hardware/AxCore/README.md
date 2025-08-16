@@ -77,7 +77,7 @@ runMain AxCore.Testing.OverallFunctionalTest
 ```
 
 ### Running the Individual Test Suite
-The `OverallFunctionalTest` suite is composed of several independent test modules. You can also execute these tests individually for more targeted debugging. Make sure you are inside the SBT shell before running these commands.
+The `OverallFunctionalTest` suite is composed of several independent test modules below. You can also execute these tests individually. Make sure you are inside the SBT shell before running these commands.
 
 ```bash
 # Make sure you're still in the sbt shell
