@@ -60,7 +60,8 @@ object Test_mpFPMA {
 
 
     // * Testing
-    Config.vcssim.compile{
+    // Config.vcssim.compile{
+    Config.iverilogsim.compile{
       AxCore_SharedAdd_MPWq4_SA(
         TileRow=1, TileCol=1, PERow=2, PECol=2,
         QtTotalWidth=4, ExpoWidth=ExpoWidth, MantWidth=MantWidth, Integer=ExpoWidth-1, Fraction=MantWidth+2

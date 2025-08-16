@@ -26,10 +26,13 @@ object Config {
     // oneFilePerComponent = true,
   )
 
-  // For Verilator + GTKWave Simulation
+  // For Verilator Simulation
   def sim = SimConfig.withConfig(spinal).withFstWave
 
-  // For VCS + Verdi Simulation
+  // For Iverilog Simulation
+  def iverilogsim = SimConfig.withConfig(spinal).withIVerilog.withWave
+
+  // For VCS Simulation
   def vcssim = SimConfig.withConfig(spinal).withVCS.withFSDBWave
 
 }

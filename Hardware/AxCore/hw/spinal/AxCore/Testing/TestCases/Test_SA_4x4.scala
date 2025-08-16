@@ -66,7 +66,8 @@ object Test_SA_4x4 {
     val Oq_Matrix = Array.ofDim[Double](4, 4)
 
     // * Testing
-    Config.vcssim.compile{
+    // Config.vcssim.compile{
+    Config.iverilogsim.compile{
       AxCore_SharedAdd_MPWq4_SA(
         TileRow=1, TileCol=1, PERow=4, PECol=4,
         QtTotalWidth=4, ExpoWidth=ExpoWidth, MantWidth=MantWidth, Integer=Integer, Fraction=Fraction

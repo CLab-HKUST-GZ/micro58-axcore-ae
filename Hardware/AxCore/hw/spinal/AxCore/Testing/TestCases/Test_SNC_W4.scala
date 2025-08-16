@@ -23,7 +23,8 @@ object Test_SNC_W4 {
 
 
     // * Testing
-    Config.vcssim.compile{SNC_W4()}.doSim { dut =>
+    // Config.vcssim.compile{SNC_W4()}.doSim { dut =>
+    Config.iverilogsim.compile{SNC_W4()}.doSim { dut =>
       // simulation process
       dut.clockDomain.forkStimulus(2)
       // simulation code
