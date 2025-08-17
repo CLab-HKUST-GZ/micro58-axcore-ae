@@ -64,98 +64,72 @@ def approximation_wrapper(model, args, torch_dtype):
     
     # Weight-only quantization
     if args.wquant:
-        from .baseline_approx.baseline_approx import BaselineApproxLinearFP16, BaselineApproxLinearBF16
-        from .L_Mul.LMul_approx import LMulApproxLinearFP16, LMulApproxLinearBF16
-        from .FPMA.FPMA_approx import FPMAApproxLinearFP16, FPMAApproxLinearBF16
-        from .AxCore.AxCore import AxCoreLinearFP16
-        if args.dtype == "bfloat16":
-            if args.approx_kernel == 'baseline':
-                aplinear = BaselineApproxLinearBF16
-            elif args.approx_kernel == 'LMul':
-                aplinear = LMulApproxLinearBF16
-            elif args.approx_kernel == 'FPMA':
-                aplinear = FPMAApproxLinearBF16
-            else:
-                raise ValueError("Unknown approximation kernel")
-        elif args.dtype == "float16":
-            if args.approx_kernel == 'baseline':
-                aplinear = BaselineApproxLinearFP16
-            elif args.approx_kernel == 'LMul':
-                aplinear = LMulApproxLinearFP16
-            elif args.approx_kernel == 'FPMA':
-                aplinear = FPMAApproxLinearFP16
-            else:
-                raise ValueError("Unknown approximation kernel")
+        from .AxCore.AxCore import AxCoreLinearFP16, mpFPMALinearFP16
         if args.quant_method == "RTN":
             if args.linear_approx:
-                for name, module in tqdm(model.named_modules()):
-                    if (isinstance(module, torch.nn.Linear) or isinstance(module, DSEWLinear)) and 'lm_head' not in name and 'output_layer' not in name:
-                        # print(f'name: {name}')
-                        # if '.0.' in name:
-                        #     if 'self_attn.o_proj' in name:
-                        #         # save original weight
-                        #         original_weight = module.weight.data
-                        #         torch.save(original_weight, f"/data-ssd/home/jiaxiang/codes/draw/AxCore/data/llama2_7b_0_attn_o.pt")
-                        #         continue
-                        # if '.29.' in name:
-                        #     if 'self_attn.o_proj' in name:
-                        #         # save original weight
-                        #         original_weight = module.weight.data
-                        #         torch.save(original_weight, f"/data-ssd/home/jiaxiang/codes/draw/AxCore/data/llama2_7b_29_attn_o.pt")
-                        #         continue
-                        # if '.39.' in name:
-                        #     if 'self_attn.out_proj' in name:
-                        #         # save original weight
-                        #         original_weight = module.weight.data
-                        #         torch.save(original_weight, f"/data-ssd/home/jiaxiang/codes/draw/AxCore/data/opt_13b_39_attn_o.pt")
-                        #         continue
-                        # module.weight.data, scales_w = pseudo_quantize_tensor_approx_mxAP(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size, mantissa_bit=1)
-                        # module.weight.data = pseudo_quantize_tensor(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size, zero_point=False, fpq=False, mantissa_bit=1)
-                        # module.weight.data = pseudo_quantize_tensor_approx_dse(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size, zero_point=False, fpq=True, mantissa_bit=1)
-                        # module.weight.data = pseudo_quantize_tensor_approx(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size, zero_point=False, fpq=True, mantissa_bit=1)
-                        # module.weight.data = pseudo_quantize_tensor_dse(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size)
-                        device = next(module.parameters()).device
-                        if args.dtype == "float16":
-                            module.weight.data, scales_w = pseudo_quantize_tensor_approx_mxAP(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size, mantissa_bit=1)
-                            module.weight.data = module.weight.data.to('cpu')
-                            scales_w = scales_w.to('cpu')
-                            new_linear = AxCoreLinearFP16(module.in_features, 
-                                                                    module.out_features, 
-                                                                    module.bias is not None, 
-                                                                    dev='cpu')
-                            with torch.no_grad():
-                                new_linear.weight.data = (module.weight.data.to(torch.float16)).contiguous()
-                                new_linear.scales.data = (scales_w.to(torch.float16)).contiguous()
-                                if module.bias is not None:
-                                    new_linear.bias.data = (module.bias.data.to(torch.float16)).contiguous()
-                            new_linear = new_linear.to(device)
-                            father_module = get_module_by_name_suffix(model, '.'.join(name.split('.')[:-1]))
-                            setattr(father_module, name.split('.')[-1], new_linear)
-                            del new_linear, module
-                            import gc
-                            gc.collect()
-                            torch.cuda.empty_cache()
-                        else:
-                            raise NotImplementedError
-                        torch.cuda.empty_cache() 
-                        # try:
-                        #     # module.weight.data = pseudo_quantize_tensor_approx(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size, zero_point=False, fpq=True, mantissa_bit=1)
-                        #     # module.weight.data = pseudo_quantize_tensor(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size, zero_point=False, fpq=True, mantissa_bit=1)
-                        #     rtn_linear = aplinear(module.in_features, 
-                        #                             module.out_features, 
-                        #                             module.bias is not None, 
-                        #                             dev=next(module.parameters()).device)
-                        #     with torch.no_grad():
-                        #         rtn_linear.weight.data = (module.weight.data.to(torch_dtype)).contiguous()
-                        #         if module.bias is not None:
-                        #             rtn_linear.bias.data = (module.bias.data.to(torch_dtype)).contiguous()
-                        #     father_module = get_module_by_name_suffix(model, '.'.join(name.split('.')[:-1]))
-                        #     setattr(father_module, name.split('.')[-1], rtn_linear)
-                        #     del rtn_linear, module
-                        #     torch.cuda.empty_cache()  
-                        #     torch.cuda.synchronize()     
-                        # except Exception as e:
-                        #     print(f"Failed to quantize {name}, error: {e}")  
+                if args.ablation:
+                    for name, module in tqdm(model.named_modules()):
+                        if (isinstance(module, torch.nn.Linear)) and 'lm_head' not in name and 'output_layer' not in name:
+                            device = next(module.parameters()).device
+                            if args.dtype == "float16":
+                                if args.optimization == 0 or args.optimization == 1:
+                                    module.weight.data, scales_w = pseudo_quantize_tensor_approx_mxAP(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size, mantissa_bit=1, ap_quant=False)
+                                elif args.optimization == 2:
+                                    module.weight.data, scales_w = pseudo_quantize_tensor_approx_mxAP(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size, mantissa_bit=1, ap_quant=True)
+                                module.weight.data = module.weight.data.to('cpu')
+                                scales_w = scales_w.to('cpu')
+                                new_linear = mpFPMALinearFP16(module.in_features, 
+                                                                        module.out_features, 
+                                                                        module.bias is not None, 
+                                                                        args.optimization,
+                                                                        dev='cpu')
+                                with torch.no_grad():
+                                    new_linear.weight.data = (module.weight.data.to(torch.float16)).contiguous()
+                                    new_linear.scales.data = (scales_w.to(torch.float16)).contiguous()
+                                    if module.bias is not None:
+                                        new_linear.bias.data = (module.bias.data.to(torch.float16)).contiguous()
+                                new_linear = new_linear.to(device)
+                                father_module = get_module_by_name_suffix(model, '.'.join(name.split('.')[:-1]))
+                                setattr(father_module, name.split('.')[-1], new_linear)
+                                del new_linear, module
+                                import gc
+                                gc.collect()
+                                torch.cuda.empty_cache()
+                            else:
+                                raise NotImplementedError
+                            torch.cuda.empty_cache() 
+                else:
+                    for name, module in tqdm(model.named_modules()):
+                        if (isinstance(module, torch.nn.Linear)) and 'lm_head' not in name and 'output_layer' not in name:
+                            # module.weight.data, scales_w = pseudo_quantize_tensor_approx_mxAP(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size, mantissa_bit=1)
+                            # module.weight.data = pseudo_quantize_tensor(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size, zero_point=False, fpq=False, mantissa_bit=1)
+                            # module.weight.data = pseudo_quantize_tensor_approx_dse(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size, zero_point=False, fpq=True, mantissa_bit=1)
+                            # module.weight.data = pseudo_quantize_tensor_approx(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size, zero_point=False, fpq=True, mantissa_bit=1)
+                            # module.weight.data = pseudo_quantize_tensor_dse(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size)
+                            device = next(module.parameters()).device
+                            if args.dtype == "float16":
+                                module.weight.data, scales_w = pseudo_quantize_tensor_approx_mxAP(module.weight.data, n_bits=args.w_bit, q_group_size=args.w_group_size, mantissa_bit=1, ap_quant=False)
+                                module.weight.data = module.weight.data.to('cpu')
+                                scales_w = scales_w.to('cpu')
+                                new_linear = AxCoreLinearFP16(module.in_features, 
+                                                                        module.out_features, 
+                                                                        module.bias is not None, 
+                                                                        dev='cpu')
+                                with torch.no_grad():
+                                    new_linear.weight.data = (module.weight.data.to(torch.float16)).contiguous()
+                                    new_linear.scales.data = (scales_w.to(torch.float16)).contiguous()
+                                    if module.bias is not None:
+                                        new_linear.bias.data = (module.bias.data.to(torch.float16)).contiguous()
+                                new_linear = new_linear.to(device)
+                                father_module = get_module_by_name_suffix(model, '.'.join(name.split('.')[:-1]))
+                                setattr(father_module, name.split('.')[-1], new_linear)
+                                del new_linear, module
+                                import gc
+                                gc.collect()
+                                torch.cuda.empty_cache()
+                            else:
+                                raise NotImplementedError
+                            torch.cuda.empty_cache() 
             else:
                 # if (args.w_bit is not None and args.w_bit < 16) and (args.a_bit is None or args.a_bit >= 16):
                 #     assert args.w_bit > 0 and args.w_bit < 16, "Weight bitwidth should be an integer between [1, 16] for weigth-only quantization, please check."

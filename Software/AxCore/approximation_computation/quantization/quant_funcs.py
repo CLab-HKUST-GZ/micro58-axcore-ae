@@ -114,9 +114,9 @@ def pseudo_quantize_vcache(tensor, n_bits=8, zero_point=True, q_group_size=-1, p
         padded_seq_len = seq_len
     
     # Reshape to prepare for quantization along seq_len groups
-    # New shape: [batch * head * (padded_seq_len // q_group_size), q_group_size * head_dim]
+    # New shape: [batch * head * (padded_seq_len // q_group_size) * head_dim, q_group_size]
     tensor = tensor.reshape(batch, head, padded_seq_len // q_group_size, q_group_size, head_dim)
-    tensor = tensor.permute(0, 1, 2, 4, 3).reshape(batch * head * (padded_seq_len // q_group_size), q_group_size * head_dim)
+    tensor = tensor.permute(0, 1, 2, 4, 3).reshape(batch * head * (padded_seq_len // q_group_size) * head_dim, q_group_size)
     
     if per_tensor:
         tensor = tensor.reshape(1, -1)
@@ -538,7 +538,7 @@ def pseudo_quantize_tensor_approx_dse(tensor, n_bits=8, zero_point=True, q_group
     return tensor
 
 @torch.no_grad()
-def pseudo_quantize_tensor_approx_mxAP(tensor, n_bits=8, q_group_size=-1, per_tensor=False, mantissa_bit=-1):
+def pseudo_quantize_tensor_approx_mxAP(tensor, n_bits=8, q_group_size=-1, per_tensor=False, mantissa_bit=-1, ap_quant=False):
     """
     The basic quantization function for weight, activation and KV cache.
     """
@@ -557,7 +557,6 @@ def pseudo_quantize_tensor_approx_mxAP(tensor, n_bits=8, q_group_size=-1, per_te
     
     assert tensor.dim() == 2
     
-    best_comp = 0
     M = mantissa_bit
     E = n_bits - 1 - M
     bias = 2 ** (E - 1) - 1
@@ -566,11 +565,13 @@ def pseudo_quantize_tensor_approx_mxAP(tensor, n_bits=8, q_group_size=-1, per_te
         )
     min_float = -max_float
     max_val = tensor.abs().amax(dim=1, keepdim=True)
-    S = max_val / max_float
-    # apply the best comp
-    # S = apdiv.apply(max_val, torch.tensor(max_float, dtype=max_val.dtype, device=max_val.device), best_comp)
-    # tensor_unscaled = apdiv.apply(tensor, S, best_comp)
-    tensor_unscaled = tensor / S
+    if ap_quant:
+        best_comp = 0
+        S = apdiv.apply(max_val, torch.tensor(max_float, dtype=max_val.dtype, device=max_val.device), best_comp)
+        tensor_unscaled = apdiv.apply(tensor, S, best_comp)
+    else:
+        S = max_val / max_float
+        tensor_unscaled = tensor / S
     
     #--------- to fp4 --------#
     tensor_unscaled = torch.clamp(tensor_unscaled, min_float, max_float)

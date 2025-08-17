@@ -61,7 +61,34 @@ void torch_launch_AxCore_group_gemm_typed_kernel(
     );
 }
 
+void torch_launch_mpFPMA_gemm_kernel_fp16(
+    const torch::Tensor &A,
+    const torch::Tensor &B,
+    torch::Tensor &C,
+    torch::Tensor &S,
+    int M, int N, int K,
+    int opt) {
+    
+    int device_id = A.device().index();
+
+    TORCH_CHECK(A.device() == B.device(), "Tensors A and B must be on the same device");
+    if (A.dtype() != torch::kHalf || B.dtype() != torch::kHalf || C.dtype() != torch::kHalf) {
+        throw std::invalid_argument("Tensors must be of type half.");
+    }
+
+    launch_mpFPMA_gemm_kernel_fp16(
+        (half*) A.data_ptr(),
+        (half*) B.data_ptr(),
+        (half*) C.data_ptr(),
+        (half*) S.data_ptr(),
+        M, N, K,
+        opt,
+        device_id
+    );
+}
+
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
     m.def("torch_launch_AxCore_group_gemm_kernel", &torch_launch_AxCore_group_gemm_kernel, "AxCore group GEMM kernel (fp16)");
     m.def("torch_launch_AxCore_group_gemm_typed_kernel", &torch_launch_AxCore_group_gemm_typed_kernel, "AxCore group GEMM typed kernel (fp16)");
+    m.def("torch_launch_mpFPMA_gemm_kernel_fp16", &torch_launch_mpFPMA_gemm_kernel_fp16, "mpFPMA GEMM kernel (fp16)");
 }

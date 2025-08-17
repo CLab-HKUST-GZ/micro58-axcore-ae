@@ -6,24 +6,7 @@
 #include <curand_kernel.h>
 #include <cstdio>
 #include <cmath> // for isfinite
-
-typedef union {
-    half fp16;
-    uint16_t u16;
-} fp16_union;
-
-__device__ uint16_t float16_to_uint16(half a) {
-    fp16_union u;
-    u.fp16 = a;
-    return u.u16;
-}
-
-__device__ half uint16_to_float16(uint16_t a) {
-    fp16_union u;
-    u.u16 = a;
-    return u.fp16;
-}
-
+#include "AxCore_utils.cuh"
 
 __device__ half baseline_approx_kernel_mul_fp16_e2m1(half a, half b) {
     uint16_t a_bits = float16_to_uint16(a);
@@ -188,12 +171,11 @@ __global__ void group_GEMM(half* dA, half* dB, half* dC, half* dS, int M, int N,
                 for (int index_n = 0; index_n < TN; index_n++) {
                     int reg_c_m = threadIdx.x * TM + index_m;
                     int reg_c_n = threadIdx.y * TN + index_n;
-                    tmp[index_m * TN + index_n] = __hadd(baseline_approx_kernel_mul_fp16_e1m2(SA[reg_c_m * BK + index_k], SB[index_k * BN + reg_c_n]), tmp[index_m * TN + index_n]);
-                    // tmp[index_m * TN + index_n] = __hadd(baseline_approx_kernel_mul_fp16_e2m1(SA[reg_c_m * BK + index_k], SB[index_k * BN + reg_c_n]), tmp[index_m * TN + index_n]);
+                    // tmp[index_m * TN + index_n] = __hadd(baseline_approx_kernel_mul_fp16_e1m2(SA[reg_c_m * BK + index_k], SB[index_k * BN + reg_c_n]), tmp[index_m * TN + index_n]);
+                    tmp[index_m * TN + index_n] = __hadd(baseline_approx_kernel_mul_fp16_e2m1(SA[reg_c_m * BK + index_k], SB[index_k * BN + reg_c_n]), tmp[index_m * TN + index_n]);
                     // tmp[index_m * TN + index_n] = __hadd(__hmul(SA[reg_c_m * BK + index_k], SB[index_k * BN + reg_c_n]), tmp[index_m * TN + index_n]);
                 }
             }
-
             accumulated_k++;
             if (accumulated_k == SUB_K) {
                 #pragma unroll
@@ -210,22 +192,16 @@ __global__ void group_GEMM(half* dA, half* dB, half* dC, half* dS, int M, int N,
         }
         __syncthreads();
     }
-
     if (accumulated_k > 0) {
         #pragma unroll
         for (int i = 0; i < TM*TN; i++) {
             tmp_fp32[i] += __half2float(tmp[i]);
         }
     }
-
     for (int index_m = 0; index_m < TM; index_m++) {
         for (int index_n = 0; index_n < TN; index_n++) {
             int reg_c_m = threadIdx.x * TM + index_m;
             int reg_c_n = threadIdx.y * TN + index_n;
-            // if (indA + index_m < M && indB + index_n < N) {
-            //     dC[(indA + reg_c_m) * N + indB + reg_c_n] = __float2half(tmp_fp32[index_m * TN + index_n]);
-            //     // dC[(indA + reg_c_m) * N + indB + reg_c_n] = tmp[index_m * TN + index_n];
-            // }
             int global_m = indA + reg_c_m;
             int global_n = indB + reg_c_n;
             if (global_m < M && global_n < N) {

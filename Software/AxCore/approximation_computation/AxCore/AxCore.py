@@ -11,7 +11,8 @@ project_root = os.path.normpath(project_root)
 axcore_cuda_module = load(name="axcore_gemm",
                    extra_include_paths=[os.path.join(project_root, "approximation_computation", "AxCore", "include")],
                    sources=[os.path.join(project_root, "approximation_computation", "AxCore", "kernel", "AxCore.cpp"), 
-                            os.path.join(project_root, "approximation_computation", "AxCore", "kernel", "AxCore_fp16.cu")],
+                            os.path.join(project_root, "approximation_computation", "AxCore", "kernel", "AxCore_fp16.cu"),
+                            os.path.join(project_root, "approximation_computation", "AxCore", "kernel", "AxCore_ablation.cu")],     
                    extra_cflags=["-O3"],  
                    extra_cuda_cflags=["-O3", "--ptxas-options=-v"], 
                    verbose=True)
@@ -31,7 +32,6 @@ class AxCoreFunctionFP16(torch.autograd.Function):
         Returns:
             Tensor: Output tensor of shape (*, out_features) with dtype torch.float16.
         """
-        
         original_shape = input.shape[:-1]
         in_features = input.shape[-1]
         in_features_w, out_features = weight.shape
@@ -212,6 +212,63 @@ class AxCoreTypedLinearFP16(torch.nn.Module):
         """
         return AxCoreTypedFunctionFP16.apply(input, self.weight.T.contiguous(), self.scales.T.contiguous(), self.types.T.contiguous(), self.bias)
 
+class mpFPMAFunctionFP16(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, input, weight, scales, bias=None, opt=0):
+        original_shape = input.shape[:-1]
+        in_features = input.shape[-1]
+        in_features_w, out_features = weight.shape
+        # out_features, in_features_w = weight.shape
+        
+        if in_features != in_features_w:
+            raise ValueError(f"Incompatible dimensions: input has {in_features} features, but weight has {in_features_w} features.")
+        
+        flattened_input = input.view(-1, in_features)
+        
+        # Allocate output tensor
+        flattened_output = torch.empty((flattened_input.shape[0], out_features), dtype=torch.float16, device=input.device)
+        
+        # Launch the CUDA kernel
+        axcore_cuda_module.torch_launch_mpFPMA_gemm_kernel_fp16(
+            flattened_input, weight, flattened_output, scales, flattened_input.shape[0], out_features, in_features, opt
+        )
+
+        # If bias is provided, add it to the output
+        if bias is not None:
+            flattened_output += bias  # Broadcast bias to (M, out_features)
+            
+        output_shape = original_shape + (out_features,)
+        output = flattened_output.view(*output_shape)
+        del flattened_input, flattened_output
+        torch.cuda.empty_cache()
+        return output
+    
+    @staticmethod
+    def backward(ctx, grad_output):
+        return None, None, None
+
+
+class mpFPMALinearFP16(torch.nn.Module):
+    def __init__(self, in_features, out_features, bias=False, opt=0, dev='cuda'):
+        super(mpFPMALinearFP16, self).__init__()
+        self.in_features = in_features
+        self.out_features = out_features
+        self.opt = opt
+        # Initialize weight parameter
+        self.register_buffer('weight', torch.empty(self.out_features,
+                                                   self.in_features, dtype=torch.float16, requires_grad=False, device=dev))
+        
+        self.register_buffer('scales', torch.empty(self.out_features, self.in_features // 128, dtype=torch.float16, requires_grad=False, device=dev))
+        
+        # Initialize bias parameter if required
+        if bias:
+            self.register_buffer('bias', torch.empty(
+                (1, self.out_features), dtype=torch.float16, requires_grad=False, device=dev))
+        else:
+            self.register_parameter('bias', None)
+    
+    def forward(self, input):
+        return mpFPMAFunctionFP16.apply(input, self.weight.T.contiguous(), self.scales.T.contiguous(), self.bias, self.opt)
 
 if __name__ == "__main__":
     import sys

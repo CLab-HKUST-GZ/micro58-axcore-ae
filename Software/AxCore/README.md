@@ -87,6 +87,58 @@ The zero-shot results under our configuration are listed in the following table.
 
 Results of zero-shot evaluation can be reproduced with slight random error.
 
+### Ablation Study: mpFPMA, mpFPMA+S, and mpFPMA+S+C
+
+For perplexity evaluation of mpFPMA/mpFPMA+S/mpFPMA+S+C in Table 2, run the corresponding script for each method:
+```bash
+# Method: mpFPMA
+sh scripts/mpFPMA/evaluation_wikitext_opt_2_7b_mpFPMA.sh   # Approx. 25 minutes, 6GB VRAM
+sh scripts/mpFPMA/evaluation_wikitext_opt_6_7b_mpFPMA.sh   # Approx. 50 minutes, 15GB VRAM
+sh scripts/mpFPMA/evaluation_wikitext_opt_13b_mpFPMA.sh    # Approx. 100 minutes, 30GB VRAM
+sh scripts/mpFPMA/evaluation_wikitext_opt_30b_mpFPMA.sh    # Approx. 200 minutes, 70GB VRAM
+
+# Method: mpFPMA+S
+sh scripts/mpFPMA_S/evaluation_wikitext_opt_2_7b_mpFPMA_S.sh   # Approx. 25 minutes, 6GB VRAM
+sh scripts/mpFPMA_S/evaluation_wikitext_opt_6_7b_mpFPMA_S.sh   # Approx. 50 minutes, 15GB VRAM
+sh scripts/mpFPMA_S/evaluation_wikitext_opt_13b_mpFPMA_S.sh    # Approx. 100 minutes, 30GB VRAM
+sh scripts/mpFPMA_S/evaluation_wikitext_opt_30b_mpFPMA_S.sh    # Approx. 200 minutes, 70GB VRAM
+
+# Method: mpFPMA+S+C
+sh scripts/mpFPMA_S_C/evaluation_wikitext_opt_2_7b_mpFPMA_S_C.sh   # Approx. 25 minutes, 6GB VRAM
+sh scripts/mpFPMA_S_C/evaluation_wikitext_opt_6_7b_mpFPMA_S_C.sh   # Approx. 50 minutes, 15GB VRAM
+sh scripts/mpFPMA_S_C/evaluation_wikitext_opt_13b_mpFPMA_S_C.sh    # Approx. 100 minutes, 30GB VRAM
+sh scripts/mpFPMA_S_C/evaluation_wikitext_opt_30b_mpFPMA_S_C.sh    # Approx. 200 minutes, 70GB VRAM
+```
+to evaluate each single model.
+
+The perplexity results under our configuration are listed in the following table.
+| Model | Method | opt-2.7b | opt-6.7b | opt-13b | opt-30b |
+| --- | --- | --- | --- | --- | --- |
+| PPL | mpFPMA | 13.83 | 11.83 | 10.80 | 9.99 |
+| PPL | mpFPMA+S | 13.24 | 11.45 | 10.49 | 9.86 |
+| PPL | mpFPMA+S+C | 13.12 | 11.14 | 10.25 | 9.74 |
+
+Results of perplexity evaluation can be reproduced with slight random error.
+
+### AxCore-KV Evaluation
+
+For perplexity evaluation of AxCore-KV in Table 2, you can use
+```bash
+sh scripts/axcore_kv/evaluation_wikitext_opt_6_7b_kv4.sh     # About 1.5 hours, 15GB VRAM
+sh scripts/axcore_kv/evaluation_wikitext_opt_13b_kv4.sh      # About 3 hours, 30GB VRAM
+sh scripts/axcore_kv/evaluation_wikitext_opt_30b_kv4.sh      # About 6 hours, 70GB VRAM
+sh scripts/axcore_kv/evaluation_wikitext_llama2_7b_kv4.sh    # About 3 hours, 16GB VRAM
+sh scripts/axcore_kv/evaluation_wikitext_llama2_70b_kv4.sh   # About 30 hours, 160GB VRAM
+```
+to evaluate each single model.
+
+The perplexity results under our configuration are listed in the following table.
+| Model | opt-6.7b | opt-13b | opt-30b | llama2-7b | llama2-70b |
+| --- | --- | --- | --- | --- | --- |
+| PPL | 11.18 | 10.59 | 9.79 | 5.82 | 3.48 |
+
+Results of perplexity evaluation can be reproduced with slight random error.
+
 ### Tender baseline
 
-For Tender baseline, you can run the following the REAMME.md in `./Tender`. to reproduce the results in Table 2.
+For Tender baseline, you can run following the REAMME.md in `./Tender` to reproduce the results in Table 2.

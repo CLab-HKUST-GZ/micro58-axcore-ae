@@ -14,3 +14,6 @@ void launch_AxCore_group_gemm_typed_kernel_fp16(
     int g,
     int M, int N, int K, int device_id,
     bool use_approx_dequant);
+
+
+void launch_mpFPMA_gemm_kernel_fp16(half* A, half* B, half* C, half* S, int M, int N, int K, int opt, int device_id);

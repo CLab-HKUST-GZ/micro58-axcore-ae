@@ -97,6 +97,9 @@ if __name__ == "__main__":
     parser.add_argument("--attention_approx", "-attna", action='store_true', default=False)
     parser.add_argument("--waquant", action='store_true', default=False, help='Enable Weight-Activation quantization')
     parser.add_argument("--a_bit", type=int, default=16, help='Activation quantization bits')
+    # ablation
+    parser.add_argument("--ablation", action='store_true', default=False)
+    parser.add_argument("--optimization", type=int, choices=[0, 1, 2]) # mpFPMA, mpFPMA+S, mpFPMA+C
     args = parser.parse_args()
     print("helloworld")
     main(args)
