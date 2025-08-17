@@ -50,7 +50,7 @@ sh scripts/evaluation_wikitext_llama2_70b.sh    # About 20 hours, 160GB VRAM
 ```
 to evaluate a single model.
 
-Remember to set the `device` variable in the script to the GPU you want to use.
+**Remember to set the `device` variable in the script to the GPU you want to use.**
 
 The results will be saved in `results/ppl_results.txt`.
 
@@ -75,7 +75,7 @@ sh scripts/evaluation_lm_eval_llama2_70b.sh     # About 90 hours, 170GB VRAM
 ```
 to evaluate a single model.
 
-Remember to set the `device` variable in the script to the GPU you want to use.
+**Remember to set the `device` variable in the script to the GPU you want to use.**
 
 The results will be saved in `results/lm_eval_results.txt`.
 
@@ -111,6 +111,8 @@ sh scripts/mpFPMA_S_C/evaluation_wikitext_opt_30b_mpFPMA_S_C.sh    # Approx. 200
 ```
 to evaluate each single model.
 
+**Remember to set the `device` variable in the script to the GPU you want to use.**
+
 The perplexity results under our configuration are listed in the following table.
 | Model | Method | opt-2.7b | opt-6.7b | opt-13b | opt-30b |
 | --- | --- | --- | --- | --- | --- |
@@ -131,6 +133,8 @@ sh scripts/axcore_kv/evaluation_wikitext_llama2_7b_kv4.sh    # About 3 hours, 16
 sh scripts/axcore_kv/evaluation_wikitext_llama2_70b_kv4.sh   # About 30 hours, 160GB VRAM
 ```
 to evaluate each single model.
+
+**Remember to set the `device` variable in the script to the GPU you want to use.**
 
 The perplexity results under our configuration are listed in the following table.
 | Model | opt-6.7b | opt-13b | opt-30b | llama2-7b | llama2-70b |
