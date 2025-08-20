@@ -46,7 +46,7 @@ sh scripts/evaluation_wikitext_opt_6_7b.sh      # About 1 hour, 15 GB VRAM
 sh scripts/evaluation_wikitext_opt_13b.sh       # About 2 hours, 30 GB VRAM
 sh scripts/evaluation_wikitext_opt_30b.sh       # About 4 hours, 70 GB VRAM
 sh scripts/evaluation_wikitext_llama2_7b.sh     # About 2 hours, 16 GB VRAM
-sh scripts/evaluation_wikitext_llama2_70b.sh    # About 20 hours, 160GB VRAM
+sh scripts/evaluation_wikitext_llama2_70b.sh    # About 20 hours, 160GB VRAM, 550GB RAM
 ```
 to evaluate a single model.
 
@@ -71,7 +71,7 @@ sh scripts/batch_evaluation_lm_eval.sh
 Or you can use
 ```bash
 sh scripts/evaluation_lm_eval_opt_30b.sh        # About 36 hours, 70GB VRAM
-sh scripts/evaluation_lm_eval_llama2_70b.sh     # About 90 hours, 170GB VRAM 
+sh scripts/evaluation_lm_eval_llama2_70b.sh     # About 90 hours, 170GB VRAM, 550GB RAM
 ```
 to evaluate a single model.
 
@@ -130,7 +130,7 @@ sh scripts/axcore_kv/evaluation_wikitext_opt_6_7b_kv4.sh     # About 1.5 hours, 
 sh scripts/axcore_kv/evaluation_wikitext_opt_13b_kv4.sh      # About 3 hours, 30GB VRAM
 sh scripts/axcore_kv/evaluation_wikitext_opt_30b_kv4.sh      # About 6 hours, 70GB VRAM
 sh scripts/axcore_kv/evaluation_wikitext_llama2_7b_kv4.sh    # About 3 hours, 16GB VRAM
-sh scripts/axcore_kv/evaluation_wikitext_llama2_70b_kv4.sh   # About 30 hours, 160GB VRAM
+sh scripts/axcore_kv/evaluation_wikitext_llama2_70b_kv4.sh   # About 30 hours, 160GB VRAM, 550GB RAM
 ```
 to evaluate each single model.
 
